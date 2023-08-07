@@ -1,2 +1,4 @@
 # 7DS-Forecast
-Tentative repository for prediction study of upcoming 7-Dimensional Sky Survey
+A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
+
+**This repo is heavily under constuction!**
