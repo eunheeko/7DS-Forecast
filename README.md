@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 # 7DS-Forecast
 A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 
@@ -11,4 +12,25 @@ A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 ![data_spec](/images/data_specification.png)
 
 ## Survey Plan
+=======
+# Notes
+
+
+## EAZY
+- read binary files: https://github.com/gbrammer/eazy-photoz/tree/f8b84a20f8e781d1f8244a24cd347a24a40f1558/inputs
+- source code: https://eazy-py.readthedocs.io/en/latest/_modules/eazy/photoz.html
+
+
+
+
+## SPHEREx
+
+
+## LSST
+
+
+## EUCLID
+Filters: EUCLID Collaboration 2022 / Schirmer
+data available from: https://euclid.esac.esa.int/msp/refdata/data/
+>>>>>>> Stashed changes
 
