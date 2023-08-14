@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 # 7DS-Forecast
 A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 
@@ -17,20 +16,12 @@ A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 
 
 ## EAZY
-- read binary files: https://github.com/gbrammer/eazy-photoz/tree/f8b84a20f8e781d1f8244a24cd347a24a40f1558/inputs
-- source code: https://eazy-py.readthedocs.io/en/latest/_modules/eazy/photoz.html
+<!-- - read binary files: https://github.com/gbrammer/eazy-photoz/tree/f8b84a20f8e781d1f8244a24cd347a24a40f1558/inputs -->
+<!-- - source code: https://eazy-py.readthedocs.io/en/latest/_modules/eazy/photoz.html -->
 
 
-
-
-## SPHEREx
-
-
-## LSST
-
-
-## EUCLID
-Filters: EUCLID Collaboration 2022 / Schirmer
-data available from: https://euclid.esac.esa.int/msp/refdata/data/
->>>>>>> Stashed changes
-
+## data/filters
+* 7DS, SPHERE: customized
+* LSST: 
+* [EUCLID](https://ui.adsabs.harvard.edu/abs/2022A%26A...662A..92E/abstract): [data](https://euclid.esac.esa.int/msp/refdata/data/)
+* VIKIG: 
