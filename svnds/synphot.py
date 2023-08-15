@@ -1,9 +1,15 @@
 import os
 import numpy as np
+import tqdm
+import pickle
+from astropy.table import Table
+
 from scipy.integrate import trapezoid
+from .skytrans import f_nu_sky, wl_um_sky
 
+from svnds import PATH_DATA
 
-#Load EL-COSMOS catalog
+# Load EL-COSMOS catalog
 def load_catalog(path_elcosmos, zone):
     """load_catalog returns the spec (EL-COSMOS identifier) for a given zone.
 
@@ -67,14 +73,14 @@ def synth_phot(wave, flux, wave_lvf, resp_lvf, tol=1e-3, return_photonrate = Fal
     return trapezoid(resp_resamp / wave_resamp * flux_resamp, wave_resamp) \
          / trapezoid(resp_resamp / wave_resamp, wave_resamp)
 
-from . import info_7ds as const_7ds
-f_nu_sky = const_7ds.f_nu_sky
-wl_um_sky = const_7ds.wl_um_sky
-Deff = const_7ds.D_EFF
-theta_pixel = const_7ds.THETA_PIXEL
-I_dark = const_7ds.I_DARK
-Npix_ptsrc = const_7ds.NPIX_PTSRC
-dQ_RN = const_7ds.DQ_RN
+
+# from .transimport info_7ds as const_7ds
+
+# Deff = const_7ds.D_EFF
+# theta_pixel = const_7ds.THETA_PIXEL
+# I_dark = const_7ds.I_DARK
+# Npix_ptsrc = const_7ds.NPIX_PTSRC
+# dQ_RN = const_7ds.DQ_RN
 
 def pointsrc_current_sds(mag_src, wave_sys, resp_sys):
     """
@@ -84,7 +90,6 @@ def pointsrc_current_sds(mag_src, wave_sys, resp_sys):
         mag_src: AB mag of the source, scalar
         Tsamp: individual exposure time [sec], can be scalar or array
 
-    WARNING: !!! ALL VARIABLES ARE GLOBALLY DECLARED !!!
     """
 
     f_nu_src = f_nu_sky*0 + 10**(-0.4*(mag_src + 48.6))  # erg/s/cm2/Hz
@@ -111,3 +116,264 @@ def pointsrc_sn_sds(I_photo_src, I_photo_sky, I_dark, Tsamp):
     SN = Q_photo_src / np.sqrt(Q_photo_src + Naper*Q_photo_sky + Naper*Q_photo_dark + Naper*dQ_RN**2)
 
     return SN
+
+
+class Syn7DS():
+
+    def __init__(self, path_elcosmos, path_save):
+        """__init__ _summary_
+
+        _extended_summary_
+
+        Args:
+            path_elcosmos (string): path to the el-cosmos files
+            path_save (string): path to save output files
+        """
+        self.path_elcosmos = path_elcosmos
+        self.path_save = path_save
+        
+        with open(os.path.joint(PATH_DATA, "filters/SDS/filters_corrected"), 'rb') as fr:
+            self.filters_corrected = pickle.load(fr)
+        return
+
+    def synphot_zone(self, zone, magscale):
+
+        specs = load_catalog(self.path_elcosmos, zone)
+        
+        spec_total = []
+        flux_total = []
+        sn_Tsamps_total = []
+
+        for sp in tqdm.tqdm(specs):
+
+            #ID
+            spec_total.append(sp[4:-5])
+            spec_path = self.path_elcosmos + f"/zone_{zone:d}/" + sp
+
+            spec = Table.read(spec_path)
+        
+            #############
+            if magscale:
+                idx_elcat = np.where(elcat['ID'] == int(sp[4:-5]))[0][0]
+                
+                mag_rband = r_HSC[idx_elcat]
+                flux_rband = 10**((mag_rband + 48.6)/(-2.5))
+                fl_factor = flux_ref / flux_rband
+            #############
+
+            
+            wl = spec['wavelength'] # Anstrom
+            f_lambda = spec['flux'] # erg/s/cm2/A
+
+            # raw data 
+            f_nu = f_lambda * wl * (wl / 2.99792e18) / (1e-23 * 1e-6)  # micro Jansky
+            wl = wl / 10000      # micron
+
+            #synthetic photometry: 7DS
+            flux_survey = np.zeros_like(lambda_7ds, dtype = float)
+            sn_Tsamps_survey = np.zeros(shape = ( len(lambda_7ds) * len(Tsamps), ), dtype = float)
+
+            for ii, wl_cen in enumerate(lambda_7ds):
+
+                wave_cen = f'{int(wl_cen):d}'
+
+                wave_lvf = self.filters_corrected['wave_' + wave_cen]
+                resp_lvf = self.filters_corrected['resp_' + wave_cen]
+
+                fl = synth_phot(wl, f_nu, wave_lvf, resp_lvf) #micro Jy
+
+                fl_erg = fl * 1e-6 * 1e-23
+                
+                #############
+                if magscale:
+                    fl_erg *= fl_factor
+                #############
+                
+                flux_survey[ii] = fl_erg #erg
+
+                I_photo_src, I_photo_sky, I_dark = pointsrc_current_sds(-2.5 * np.log10(fl_erg) - 48.6, wave_lvf, resp_lvf)
+
+                for it, tt in enumerate(Tsamps):
+                    sn = pointsrc_sn_sds(I_photo_src, I_photo_sky, I_dark, tt)
+                    sn_Tsamps_survey[ii*len(Tsamps) + it] = sn
+
+            flux_total.append(flux_survey)
+            sn_Tsamps_total.append(sn_Tsamps_survey)
+
+        spec_total = np.array(spec_total)
+        flux_total = np.array(flux_total)
+        sn_Tsamps_total = np.array(sn_Tsamps_total)
+
+        # create table
+        # columns
+        cols = []
+        cols.append(spec_total) #plate
+
+        names = ['spec']
+
+        for ii, wl_cen in enumerate(lambda_7ds):
+
+            wave_cen = f'{int(wl_cen):d}'
+
+            cols.append(flux_total[:, ii])
+            names.append('flux_' + wave_cen)
+
+            for it, tt in enumerate(Tsamps):
+
+                cols.append(flux_total[:, ii] / sn_Tsamps_total[:, ii*len(Tsamps)+it])
+                names.append('flux_' + wave_cen + f'_err_{tt:d}')
+
+
+        tbl_synphot = Table(cols, names = names)
+        tbl_synphot.write("/data8/EL_COSMOS/" + savepath, overwrite = True) #'synphot_uband_zone9.csv'
+
+        return
+    
+    def synphot(self, zones = range(1, 10), magscale = False):
+
+        for zone in zones:
+            self.synphot_zone(zone, magscale)
+
+        return
+
+# class SynSPx():
+
+#     def __init__():
+#         return
+    
+class SynSvy():
+
+    def __init__(self, survey, path_elcosmos, path_save):
+
+        self.survey = survey
+
+        if self.survey == 'LSST':
+            from .info_LSST import FILTERS, MAG5, savepath, COL_WAVE, COL_RESP, FACTOR_WAVE, NAMES
+            self.filters = FILTERS
+            self.mag5 = MAG5
+            self.savpath = savepath
+            self.col_wave = COL_WAVE
+            self.col_resp = COL_RESP
+            self.factor_wave = FACTOR_WAVE
+            self.names = NAMES
+        elif self.survey == 'Euclid':
+            from .info_EUCLID import FILTERS, MAG5, savepath, COL_WAVE, COL_RESP, FACTOR_WAVE, NAMES
+            self.filters = FILTERS
+            self.mag5 = MAG5
+            self.savpath = savepath
+            self.col_wave = COL_WAVE
+            self.col_resp = COL_RESP
+            self.factor_wave = FACTOR_WAVE
+            self.names = NAMES
+        elif self.survey == 'VIKING':
+            from .info_VIKING import FILTERS, MAG5, savepath, COL_WAVE, COL_RESP, FACTOR_WAVE, NAMES
+            self.filters = FILTERS
+            self.mag5 = MAG5
+            self.savpath = savepath
+            self.col_wave = COL_WAVE
+            self.col_resp = COL_RESP
+            self.factor_wave = FACTOR_WAVE
+            self.names_filter = NAMES
+        else:
+            raise Exception("Options: LSST, Euclid, and VIKING")
+        
+        self.path_elcomos = path_elcosmos
+        self.path_save = path_save
+
+        return
+    
+
+    def synphot(self, zones = range(1, 10), magscale = False, mag_ref = 18):
+
+        for zone in zones:
+            self.synphot_zone(zone, magscale, mag_ref)
+
+        return
+
+    def synphot_zone(self, zone, magscale, mag_ref):
+
+        specs = load_catalog(self.path_elcosmos, zone)
+        
+        spec_total = []
+        flux_total = []
+        # sn_Tsamps_total = []
+        flux_err_total = []
+
+        for sp in tqdm.tqdm(specs):
+            #ID
+            spec_total.append(sp[4:-5])
+            spec_path = self.path_elcosmos + f"/zone_{zone:d}/" + sp
+
+            spec = Table.read(spec_path)
+        
+            #############
+            if magscale:
+                idx_elcat = np.where(elcat['ID'] == int(sp[4:-5]))[0][0]
+                
+                mag_rband = r_HSC[idx_elcat]
+                flux_rband = 10**((mag_rband + 48.6)/(-2.5))
+                fl_factor = flux_ref / flux_rband
+            #############
+
+            wl = spec['wavelength'] # Anstrom
+            f_lambda = spec['flux'] # erg/s/cm2/A
+
+            # raw data 
+            f_nu = f_lambda * wl * (wl / 2.99792e18) / (1e-23 * 1e-6)  # micro Jansky
+            wl = wl / 10000      # micron
+
+            #synthetic photometry:
+            flux_survey = np.zeros(len(self.names_filter), dtype = float)
+            flux_err_survey = np.zeros(len(self.names_filter), dtype = float)
+
+            for ii, wl_cen in enumerate(self.names_filter):
+                
+                wave_cen = wl_cen
+
+                wave_lvf = self.filters[ii][self.col_wave] * self.factor_wave #nm to micron
+                resp_lvf = self.filters[ii][self.col_resp]
+
+                fl = synth_phot(wl, f_nu, wave_lvf, resp_lvf) #micro Jy
+
+                fl_erg = fl * 1e-6 * 1e-23 #erg
+                
+                #############
+                if magscale:
+                    fl_erg *= fl_factor
+                #############
+
+                flux_survey[ii] = fl_erg #erg
+
+                xx = 10**(0.4 * (-2.5 * np.log10(fl_erg) - 48.6 - self.mag5[ii]))
+                gamma = 0.04
+                sigma = np.sqrt( gamma * xx**2) #mag
+                sigma_flux = np.abs( np.log(10) / 2.5 * sigma * fl_erg ) #erg
+                
+                flux_err_survey[ii] = sigma_flux #erg
+
+            flux_total.append(flux_survey)
+            flux_err_total.append(flux_err_survey)
+
+        spec_total = np.array(spec_total)
+        flux_total = np.array(flux_total)
+        flux_err_total = np.array(flux_err_total)
+
+        ##save table
+        cols = []
+        cols.append(spec_total) #plate
+
+        names = ['spec']
+
+        for ii, wl_cen in enumerate(self.names_filter):
+
+            wave_cen = wl_cen
+
+            cols.append(flux_total[:, ii])
+            cols.append(flux_err_total[:, ii])
+            names.append('flux_' + wave_cen)
+            names.append('flux_' + wave_cen + '_err')
+
+        filename = f'synphot_LSST_scale_{mag_ref:d}_zone_{zone:d}_yrs.csv'
+
+        tbl_synphot = Table(cols, names = names)
+        tbl_synphot.write(self.savepath + 'zones/' + filename, overwrite = True) #'synphot_uband_zone9.csv'
