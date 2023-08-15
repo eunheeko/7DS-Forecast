@@ -4,10 +4,16 @@ A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 **This repo is heavily under constuction!**
 
 * [Test page](https://eunheeko.github.io/7DS-Forecast/)
+* [Read the Docs](https://7ds-forecast.readthedocs.io/)
+* [pip](https://pypi.org/project/svnds/0.0.1/)
 
-# Prediction
+## Installlation
+`pip install svnds==0.0.1`
 
-## Data Specifiaction
+
+## Context
+
+<!-- ## Data Specifiaction
 ![data_spec](/images/data_specification.png)
 
 ## Survey Plan
@@ -20,8 +26,8 @@ A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 <!-- - source code: https://eazy-py.readthedocs.io/en/latest/_modules/eazy/photoz.html -->
 
 
-## data/filters
+<!-- ## data/filters
 * 7DS, SPHERE: customized
 * LSST: 
 * [EUCLID](https://ui.adsabs.harvard.edu/abs/2022A%26A...662A..92E/abstract): [data](https://euclid.esac.esa.int/msp/refdata/data/)
-* VIKIG: 
+* VIKIG:  --> 
