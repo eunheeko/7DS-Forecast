@@ -6,15 +6,26 @@
 Welcome to svnds's documentation!
 =================================
 
+Attribution:
++++++++++++++++++++++++++++++++++
+To be updated
+
+
+User Guide:
++++++++++++++++++++++++++++++++++
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    notebooks.rst
 
+Log:
++++++++++++++++++++++++++++++++++
 
+**0.1.1 (2023-08-15)**
+- First deployment for test.
 
-Indices and tables
+Contents
 ==================
 
 * :ref:`genindex`
