@@ -4,6 +4,10 @@ from astropy.table import Table
 from scipy.ndimage import gaussian_filter
 from svnds import PATH_DATA
 
+###### Constants
+H = 6.626e-27 # erg/Hz
+C = 3e10      # cm/s 
+
 ##### Sky
 path_skytable = os.path.join(PATH_DATA, "systematics/", "skytable.fits")
 # path_skytabel = ("./data/sys")
