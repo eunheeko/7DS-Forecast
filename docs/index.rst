@@ -17,7 +17,9 @@ User Guide:
    :maxdepth: 2
    :caption: Contents:
 
-   notebooks.rst
+   installation
+   notebooks
+   api
 
 Log:
 +++++++++++++++++++++++++++++++++
@@ -25,9 +27,9 @@ Log:
 **0.1.1 (2023-08-15)**
 - First deployment for test.
 
-Contents
-==================
+.. Contents
+.. ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. * :ref:`genindex`
+.. * :ref:`modindex`
+.. * :ref:`search`

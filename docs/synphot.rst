@@ -4,5 +4,5 @@ synphot
 =================================
 .. module:: svnds
 
-.. automodeul:: svnds.synphot
-        : members:
+.. automodule:: svnds.synphot
+        :members:
