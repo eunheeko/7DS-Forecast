@@ -1,5 +1,6 @@
-sphinx < 7.0.0
-sphinx_rtd_theme
+sphinx==5.3.0
+sphinx-rtd-theme
 nbsphinx
 pandoc
 docutils
+# <0.20, > 0.14
