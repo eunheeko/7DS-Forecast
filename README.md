@@ -1,4 +1,8 @@
 # 7DS-Forecast
+
+![7DS photo-z](/images/svn_dimensional_redshift.gif)
+<!-- ![7D photoz](https://piskel-imgstore-b.appspot.com/img/40e0dbe8-3c1e-11ee-8bd4-95e893aea127.gif) -->
+
 A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 
 **This repo is heavily under constuction!**
