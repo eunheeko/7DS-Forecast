@@ -1,6 +1,6 @@
 # 7DS-Forecast
 
-![7DS photo-z](/images/svn_dimensional_redshift.gif)
+![7DS photo-z](/images/svn_dim_photoz.gif)
 <!-- ![7D photoz](https://piskel-imgstore-b.appspot.com/img/40e0dbe8-3c1e-11ee-8bd4-95e893aea127.gif) -->
 
 A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
@@ -34,4 +34,8 @@ A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 * 7DS, SPHERE: customized
 * LSST: 
 * [EUCLID](https://ui.adsabs.harvard.edu/abs/2022A%26A...662A..92E/abstract): [data](https://euclid.esac.esa.int/msp/refdata/data/)
-* VIKIG:  --> 
+* VIKIG:  -->
+
+
+## For large data:
+<!-- https://docs.github.com/en/repositories/working-with-files/managing-large-files -->
