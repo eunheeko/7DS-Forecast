@@ -1,6 +1,7 @@
 # 7DS-Forecast
+<p align="center"><img src="./images/svn_dim_photoz.gif"></p>
 
-![7DS photo-z](/images/svn_dim_photoz.gif)
+<!-- ![7DS photo-z](/images/svn_dim_photoz.gif) -->
 <!-- ![7D photoz](https://piskel-imgstore-b.appspot.com/img/40e0dbe8-3c1e-11ee-8bd4-95e893aea127.gif) -->
 
 A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
@@ -12,6 +13,7 @@ A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 * [pip](https://pypi.org/project/svnds/0.0.1/)
 
 ## Installlation
+
 `pip install svnds==0.0.1`
 
 
