@@ -6,3 +6,5 @@ __pycache__/
 svnds.egg-info/
 
 _build/
+
+results/
