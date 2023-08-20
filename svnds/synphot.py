@@ -127,7 +127,12 @@ class Syn7DS():
 
 
         with open(os.path.join(PATH_DATA, "filters/SDS/filters_corrected"), 'rb') as fr:
-            self.filters_corrected = pickle.load(fr)  
+            self.filters_corrected = pickle.load(fr)
+
+        print('survey: ' + self.survey)
+        print('Exposure time: ' )
+        print(Tsamps)
+
         return
 
     def synphot(self, zones = range(1, 10), magscale = False, mag_ref = 18):
