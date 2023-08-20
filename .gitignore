@@ -8,3 +8,7 @@ svnds.egg-info/
 _build/
 
 results/
+
+dist/
+
+svnds.egg-info/
