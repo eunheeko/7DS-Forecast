@@ -19,5 +19,3 @@ MAG5 = [23.1, 22.3, 22.1, 21.5, 21.2] # S/R = 5 limiting magnitudes from VKING D
 COL_WAVE = 'col1'
 FACTOR_WAVE = 1 / 1000 # nm to micron
 COL_RESP = 'col2'
-
-savepath = '/data8/EL_COSMOS/synphots/VIKING/'

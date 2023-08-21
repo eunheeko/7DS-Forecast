@@ -1,6 +1,6 @@
 import numpy as np
-from scipy import interpolate 
-from scipy.ndimage import gaussian_filter
+# from scipy import interpolate 
+# from scipy.ndimage import gaussian_filter
 
 from astropy.table import Table
 from astropy import units as u
@@ -43,6 +43,7 @@ NCHAN = 16         # number of channels per band (or steps)
 SPHEREx_lambda_min = np.array([0.75, 1.11, 1.64, 2.42, 3.82, 4.42])  # starting wavelength
 SPHEREx_lambda_max = SPHEREx_lambda_min * ((2*SPHEREx_R+1)/(2*SPHEREx_R-1))**NCHAN
 SPHEREx_lambda_mid = (SPHEREx_lambda_min + SPHEREx_lambda_max)/2
+
 
 THETA_SPEC = NPIX / NCHAN * THETA_PIXEL / 60  # [arcmin]
 
@@ -140,3 +141,49 @@ I_scope = 1e-9 * nuInu_scope * np.pi*(PIXEL_SIZE*1e-6)**2/SPHEREx_R*eff_LVF*eff_
 I_FPA   = 1e-9 * nuInu_FPA   * np.pi*(PIXEL_SIZE*1e-6)**2          *eff_fpa/(H*C_UMS/SPHEREx_lambda_max)
 
 
+######################################################################################################
+################# Nchan = 16 ==> iband
+I_STEPS  = np.arange(NCHAN, dtype=float)
+
+###########  ibands 16 x Nchanc 6 array
+LAMBDA_IS = np.array(
+    [list( SPHEREx_lambda_min * ( ( (2*SPHEREx_R+1) / (2*SPHEREx_R-1) )**x ) )
+    for x in I_STEPS]
+    , dtype = object)
+
+LAMBDA_IS = LAMBDA_IS.astype(float)
+def nuInu_ZL(lambda_um, f_ZL=1.7):
+    # very rough approximation for ZL
+    # nuInu(sky): fit for zodiacal light [nW/m2/sr]
+    # f_ZL = a fudge factor for margin
+    A_scat = 3800
+    T_scat = 5500
+    b_scat = 0.4
+    A_therm = 5000
+    T_therm = 270
+    nuInu = f_ZL *(A_scat*(lambda_um**b_scat)*((lambda_um)**(-4))/(np.exp(H*C_UMS/(K*T_scat*lambda_um))-1)
+                +A_therm*1000000          *((lambda_um)**(-4))/(np.exp(H*C_UMS/(K*T_therm*lambda_um))-1)                      )
+    return nuInu
+
+nuInu_skys = nuInu_ZL(LAMBDA_IS) #[ nW/m2/sr]
+##### sky (zodi here) & instrument & dark + readout noses [e/s]
+I_skys = 1e-9 * nuInu_skys*AOMEGA*eff_opt*eff_fpa/(SPHEREx_R * H * C_UMS/LAMBDA_IS)
+I_noises = I_skys + I_scope + I_FPA
+
+dQ_noises = np.sqrt( 1.2*(I_noises + I_DARK)*Tint )
+dI_noises = np.sqrt( dQ_noises**2 + dQ_RN_sh**2 ) / Tint
+
+#extended souece, [nW/m2/sr]
+dnuInu_noises = (dI_noises/I_noises)*(nuInu_skys + nuInu_scope + nuInu_FPA)
+
+# point source
+FWHM_diffraction = 1.22*LAMBDA_IS/(D*1e4) * rad2arcsec
+FWHM_wfe = FWHM_diffraction * np.sqrt(np.exp((2*np.pi*WFE/LAMBDA_IS)**2))
+FWHM_jitter = RMS_POINTING * 2.35 * np.ones_like(LAMBDA_IS)
+FWHM = np.sqrt(FWHM_wfe**2 + FWHM_jitter**2)
+
+# N(pixels) for a point-source
+Npix_ptsrc = np.pi*(FWHM/THETA_PIXEL)**2
+
+# Fluxes noises within apertures - dFnu [uJy]
+dFnu_noises = np.sqrt(Npix_ptsrc) * 1e26 * 1e6 * PIXEL_SR * (dnuInu_noises*1e-9) * (LAMBDA_IS/C_UMS)

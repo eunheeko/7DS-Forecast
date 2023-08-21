@@ -17,5 +17,3 @@ MAG5 = [24.0, 24.2, 23.9] # S/R = 5 limiting magnitudes  from Graham et al. 2020
 COL_WAVE = 'WAVE'
 FACTOR_WAVE = 1 / 1000 # nm to micron
 COL_RESP = 'T_TOTAL'
-
-savepath = '/data8/EL_COSMOS/synphots/EUCLID/'

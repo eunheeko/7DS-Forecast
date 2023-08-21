@@ -19,5 +19,3 @@ MAG5 = [26.1, 27.4, 27.5, 26.8, 26.1, 24.9] # S/R = 5 limiting magnitudes from G
 COL_WAVE = 'col1'
 FACTOR_WAVE = 1 / 1000 # nm to microns
 COL_RESP = 'col2'
-
-savepath = '/data8/EL_COSMOS/synphots/LSST/'

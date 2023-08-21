@@ -280,10 +280,160 @@ class Syn7DS():
 
         return SN
 
-# class SynSPx():
+class SynSPx():
 
-#     def __init__():
-#         return
+    def __init__(self, path_elcosmos, path_save):
+        """__init__ _summary_
+
+        _extended_summary_
+
+        Args:
+            path_elcosmos (string): path to the el-cosmos files
+            path_save (string): path to save output files
+        """
+        self.survey = 'SPHEREx'
+        self.path_elcosmos = path_elcosmos
+        self.path_save = path_save
+    
+        with open(os.path.join(PATH_DATA, "filters/SPHEREx/filters_SPHEREx_corrected"), 'rb') as fr:
+            self.filters_corrected = pickle.load(fr)
+
+        from .info_SPHEREx import SPHEREx_lambda_min, SPHEREx_lambda_max, SPHEREx_R, LAMBDA_IS, NCHAN, D, Tint, dFnu_noises
+        self.SPHEREx_lambda_min = SPHEREx_lambda_min
+        self.SPHEREx_lambda_max = SPHEREx_lambda_max
+        self.SPHEREx_R = SPHEREx_R
+        self.lambda_is = LAMBDA_IS
+        self.Nchan = NCHAN
+        self.D = D
+        self.Tint = Tint
+        self.dFnu_noises = dFnu_noises
+
+
+
+        print('survey: ' + self.survey)
+        print('Exposure time: total integration time is set to 180s for two years of SPHEREx survey')
+
+        return
+
+    def synphot(self, zones = range(1, 10), magscale = False, mag_ref = 18):
+
+        if magscale:
+            self.mag_ref = mag_ref
+            self.flux_ref = 10**((self.mag_ref + 48.6)/(-2.5))
+    
+        for zone in zones:
+            self.synphot_zone(zone, magscale)
+
+            print(f'zone {zone:d} completed!')
+
+        return
+    
+    def synphot_zone(self, zone, magscale):
+
+        specs = load_catalog(self.path_elcosmos, zone)
+        
+        spec_total = []
+        flux_total = []
+        sn_total = []
+
+        for sp in tqdm.tqdm(specs):
+            #ID
+            spec_total.append(sp[4:-5])
+            spec_path = f"/data8/EL_COSMOS/zone_{zone:d}/" + sp
+
+            spec = Table.read(spec_path)
+
+            #############
+            if magscale:
+                idx_elcat = np.where(elcat_light['ID'] == int(sp[4:-5]))[0][0]
+                
+                mag_rband = elcat_light['r_HSC'][idx_elcat]
+                flux_rband = 10**((mag_rband + 48.6)/(-2.5))
+                fl_factor = self.flux_ref / flux_rband
+            #############
+
+            wl = spec['wavelength'] # Anstrom
+            f_lambda = spec['flux'] # erg/s/cm2/A
+
+            # raw data 
+            f_nu = f_lambda * wl * (wl / 2.99792e18) / (1e-23 * 1e-6)  # micro Jansky
+            wl = wl / 10000      # micron
+
+            #synthetic photometry: SPHEREx
+            flux_survey = np.zeros(96, dtype = float)
+            sn_survey = np.zeros(96, dtype = float)
+
+            for iband, (l1, l2, R) in enumerate(zip(self.SPHEREx_lambda_min, self.SPHEREx_lambda_max, self.SPHEREx_R)):
+
+                lambda_i = self.lambda_is[:, iband]
+
+                for ii, wl_cen in enumerate(lambda_i):
+
+                    wave_lvf = self.filters_corrected[f'wave_band{iband+1:d}_{ii+1}']
+                    resp_lvf = self.filters_corrected[f'resp_band{iband+1:d}_{ii+1}']
+
+                    ######## photometry
+                    fl = synth_phot(wl, f_nu, wave_lvf, resp_lvf) #micro Jy
+                    fl_erg = fl * 1e-6 * 1e-23 # erg/s/cm2/Hz
+
+                    #############
+                    if magscale:
+                        fl_erg *= fl_factor
+                    #############
+                    
+                    flux_survey[ii + self.Nchan * iband] = fl_erg # erg/s/cm2/Hz
+
+                    ### ph/s/cm2
+                    photon_rate_src = synth_phot(wl, 0*wl+fl_erg, wave_lvf, resp_lvf, return_photonrate=True)
+                    ### [e/s] per aperture (no aperture loss)
+                    I_photo_src = photon_rate_src * (np.pi/4*self.D**2)
+                    Q_photo_src = I_photo_src * self.Tint # total integration time ==> [e]
+
+                    ######## total noise per aperture: uJy ==> erg-related
+                    fl_erg_noise = 0*wl + self.dFnu_noises[ii, iband]*1e-6*1e-23# erg/s/cm2/Hz
+                    ### ph/s/cm2
+                    photon_rate_noise = synth_phot(wl, fl_erg_noise, wave_lvf, resp_lvf, return_photonrate=True)
+                    ### [e/s]
+                    I_photo_noises = photon_rate_noise * (np.pi/4*self.D**2)
+                    Q_photo_noises =  I_photo_noises * self.Tint
+
+                    SN = Q_photo_src / np.sqrt(Q_photo_src + Q_photo_noises)
+                    sn_survey[ii + self.Nchan * iband] = SN
+            flux_total.append(flux_survey)
+            sn_total.append(sn_survey)
+
+        spec_total = np.array(spec_total)
+        flux_total = np.array(flux_total)
+        sn_total = np.array(sn_total)
+
+        # create table
+        # columns
+        cols = []
+        cols.append(spec_total) #plate
+
+        names = ['spec']
+
+        for iband, (l1, l2, R) in enumerate(zip(self.SPHEREx_lambda_min, self.SPHEREx_lambda_max, self.SPHEREx_R)):
+            lambda_i = self.lambda_is[:, iband]
+
+            for ii, wl_cen in enumerate(lambda_i):
+
+                cols.append(flux_total[:,ii + self.Nchan * iband])
+                names.append(f'flux_band{iband+1:d}_{ii+1}')
+
+                cols.append(flux_total[:,ii + self.Nchan * iband] / sn_total[:, ii + self.Nchan * iband])
+                names.append(f'flux_band{iband+1:d}_{ii+1}_err')
+        
+        filename = self.path_save + 'synphot_' + self.survey 
+        
+        if magscale:
+            filename += f'_scale_{self.mag_ref:.1f}'
+        filename += f'_zone_{zone:d}.csv'
+
+        tbl_synphot = Table(cols, names = names)
+        tbl_synphot.write(filename, overwrite = True) #'synphot_uband_zone9.csv'
+
+        return
     
 class SynSvy():
 
@@ -295,7 +445,6 @@ class SynSvy():
             from .info_LSST import FILTERS, MAG5, savepath, COL_WAVE, COL_RESP, FACTOR_WAVE, NAMES
             self.filters = FILTERS
             self.mag5 = MAG5
-            self.savpath = savepath
             self.col_wave = COL_WAVE
             self.col_resp = COL_RESP
             self.factor_wave = FACTOR_WAVE
@@ -304,7 +453,6 @@ class SynSvy():
             from .info_EUCLID import FILTERS, MAG5, savepath, COL_WAVE, COL_RESP, FACTOR_WAVE, NAMES
             self.filters = FILTERS
             self.mag5 = MAG5
-            self.savpath = savepath
             self.col_wave = COL_WAVE
             self.col_resp = COL_RESP
             self.factor_wave = FACTOR_WAVE
@@ -313,7 +461,6 @@ class SynSvy():
             from .info_VIKING import FILTERS, MAG5, savepath, COL_WAVE, COL_RESP, FACTOR_WAVE, NAMES
             self.filters = FILTERS
             self.mag5 = MAG5
-            self.savpath = savepath
             self.col_wave = COL_WAVE
             self.col_resp = COL_RESP
             self.factor_wave = FACTOR_WAVE
@@ -323,6 +470,11 @@ class SynSvy():
         
         self.path_elcomos = path_elcosmos
         self.path_save = path_save
+
+
+        print('survey: ' + self.survey)
+        print('Exposure time: 5-sigma limitig magnitude is calculated based on each references')
+
 
         return
     
