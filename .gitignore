@@ -12,3 +12,5 @@ results/
 dist/
 
 svnds.egg-info/
+
+data_ehko/
