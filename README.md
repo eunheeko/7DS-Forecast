@@ -1,4 +1,4 @@
-# 7DS-Forecast
+# 7DS-Forecast-Photoz
 <p align="center"><img src="./images/svn_dim_photoz.gif"></p>
 
 <!-- ![7DS photo-z](/images/svn_dim_photoz.gif) -->
@@ -12,12 +12,16 @@ A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 * [Read the Docs](https://7ds-forecast.readthedocs.io/)
 * [pip](https://pypi.org/project/svnds/0.0.1/)
 
+## Overview
+Using `svnds`, you can generate mock data that would be observed in the future 7DS and probe feasibility of science cases.
+
 ## Installlation
+### pip
 
 `pip install svnds==0.0.1`
 
-
-## Context
+### git
+`git clone `
 
 <!-- ## Data Specifiaction
 ![data_spec](/images/data_specification.png)
@@ -39,5 +43,5 @@ A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 * VIKIG:  -->
 
 
-## For large data:
+<!-- ## For large data: -->
 <!-- https://docs.github.com/en/repositories/working-with-files/managing-large-files -->
