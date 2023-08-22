@@ -2,7 +2,7 @@ import numpy as np
 from scipy import interpolate 
 from astropy.table import Table
 from astropy import units as u
-from svnds import H, C
+# from svnds import H, C
 
 # import os
 # from svnds import PATH_DATA
