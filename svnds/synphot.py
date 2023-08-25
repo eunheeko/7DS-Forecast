@@ -10,6 +10,7 @@ from .skytrans import f_nu_sky, wl_um_sky
 from svnds import PATH_DATA
 
 elcat_light = Table.read(os.path.join(PATH_DATA, "elcosmos/elcosmos_light.csv"))
+m6250_light = Table.read(os.path.join(PATH_DATA, "elcosmos/m6250_light.csv"))
 
 # Load EL-COSMOS catalog
 def load_catalog(path_elcosmos, zone):
@@ -97,7 +98,11 @@ def merge_tbl(path_save, name_merged_tbl):
     synphot_tot.write(path_save + name_merged_tbl, overwrite = True)
     print("Final table is created")
     return
-    
+
+def synphot_7ds(wave):
+
+    return
+
 Tsamps = np.array([180, 180 * 364/14, 180 * 364/14 * 3, 180 * 364/14 * 5, 180 * 364/14 * 7, 180 * 365, 180 * 365 * 5])
 Tsamps = (Tsamps * 0.5).astype(int)
 class Syn7DS():
@@ -166,10 +171,10 @@ class Syn7DS():
         
             #############
             if magscale:
-                idx_elcat = np.where(elcat_light['ID'] == int(sp[4:-5]))[0][0]
+                idx_elcat = np.where(m6250_light['spec'] == int(sp[4:-5]))[0][0]
                 
-                mag_rband = elcat_light['r_HSC'][idx_elcat]
-                flux_rband = 10**((mag_rband + 48.6)/(-2.5))
+                # mag_rband = m6250_light['flux_6250'][idx_elcat]
+                flux_rband = m6250_light['flux_6250'][idx_elcat]
                 fl_factor = self.flux_ref / flux_rband
             #############
 
@@ -237,7 +242,7 @@ class Syn7DS():
 
         filename = self.path_save + 'synphot_' + self.survey 
         if magscale:
-            filename += f'_scale_{self.mag_ref:d}'
+            filename += f'_scale_{self.mag_ref:.1f}'
         filename += f'_zone_{zone:d}.csv'
 
         tbl_synphot = Table(cols, names = names)
@@ -339,16 +344,17 @@ class SynSPx():
         for sp in tqdm.tqdm(specs):
             #ID
             spec_total.append(sp[4:-5])
-            spec_path = f"/data8/EL_COSMOS/zone_{zone:d}/" + sp
+            spec_path = self.path_elcosmos + f"/zone_{zone:d}/" + sp
 
             spec = Table.read(spec_path)
 
             #############
             if magscale:
-                idx_elcat = np.where(elcat_light['ID'] == int(sp[4:-5]))[0][0]
+
+                idx_elcat = np.where(m6250_light['spec'] == int(sp[4:-5]))[0][0]
                 
-                mag_rband = elcat_light['r_HSC'][idx_elcat]
-                flux_rband = 10**((mag_rband + 48.6)/(-2.5))
+                # mag_rband = m6250_light['flux_6250'][idx_elcat]
+                flux_rband = m6250_light['flux_6250'][idx_elcat]
                 fl_factor = self.flux_ref / flux_rband
             #############
 
@@ -509,10 +515,10 @@ class SynSvy():
         
             #############
             if magscale:
-                idx_elcat = np.where(elcat_light['ID'] == int(sp[4:-5]))[0][0]
+                idx_elcat = np.where(m6250_light['spec'] == int(sp[4:-5]))[0][0]
                 
-                mag_rband = elcat_light['r_HSC'][idx_elcat]
-                flux_rband = 10**((mag_rband + 48.6)/(-2.5))
+                # mag_rband = m6250_light['flux_6250'][idx_elcat]
+                flux_rband = m6250_light['flux_6250'][idx_elcat]
                 fl_factor = self.flux_ref / flux_rband
             #############
 
@@ -576,7 +582,7 @@ class SynSvy():
 
         filename = self.path_save + 'synphot_' + self.survey 
         if magscale:
-            filename += f'_scale_{self.mag_ref:d}'
+            filename += f'_scale_{self.mag_ref:.1f}'
         filename += f'_zone_{zone:d}.csv'
 
         tbl_synphot = Table(cols, names = names)
