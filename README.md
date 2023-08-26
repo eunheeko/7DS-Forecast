@@ -6,7 +6,7 @@
 
 A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 
-**This repo is heavily under constuction!**
+**This repo is under sconstuction!**
 
 * [Test page](https://eunheeko.github.io/7DS-Forecast/)
 * [Read the Docs](https://7ds-forecast.readthedocs.io/)
@@ -14,6 +14,15 @@ A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 
 ## Overview
 Using `svnds`, you can generate mock data that would be observed in the future 7DS and probe feasibility of science cases.
+
+### Understand & Utilize 7DS specificications
+* features of 40 medium band filters
+
+### Generate mock data
+* `7DS`, `SPHEREx`, `LSST`, `Euclid`, `VIKING`, `PANSTARRS` as of Aug. 26, 2023
+
+### Customize SED models
+* to be updated
 
 ## Installlation
 ### pip
