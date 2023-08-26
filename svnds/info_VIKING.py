@@ -1,6 +1,6 @@
 from astropy.table import Table
 
-# import EUCLID filters
+# import VIKING filters
 path_filters = './data/filters/VIKING/'
 Z_V = Table.read(path_filters + 'VISTA_Filters_at80K_forETC_Z.dat', format = 'ascii.no_header')
 Y_V = Table.read(path_filters + 'VISTA_Filters_at80K_forETC_Y.dat', format = 'ascii.no_header')

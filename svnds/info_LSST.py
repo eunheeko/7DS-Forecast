@@ -1,7 +1,9 @@
 from astropy.table import Table
+from svnds import PATH_DATA
+import os
 
-# import EUCLID filters
-path_filters = './data/filters/LSST/'
+# import LSST filters
+path_filters = os.path.join(PATH_DATA, 'filters/LSST/')
 u_L = Table.read(path_filters + 'total_u.dat', format = 'ascii')
 g_L = Table.read(path_filters + 'total_g.dat', format = 'ascii')
 r_L = Table.read(path_filters + 'total_r.dat', format = 'ascii')

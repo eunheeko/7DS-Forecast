@@ -1,7 +1,9 @@
 from astropy.table import Table
+from svnds import PATH_DATA
+import os
 
 # import EUCLID filters
-path_filters = './data/filters/EUCLID/'
+path_filters = os.path.join(PATH_DATA, 'filters/EUCLID/')
 J_E = Table.read(path_filters + 'NISP-PHOTO-PASSBANDS-V1-J_throughput.dat', format = 'ascii.commented_header')
 H_E = Table.read(path_filters + 'NISP-PHOTO-PASSBANDS-V1-H_throughput.dat', format = 'ascii.commented_header')
 Y_E = Table.read(path_filters + 'NISP-PHOTO-PASSBANDS-V1-Y_throughput.dat', format = 'ascii.commented_header')
