@@ -448,7 +448,7 @@ class SynSvy():
         self.survey = survey
 
         if self.survey == 'LSST':
-            from .info_LSST import FILTERS, MAG5, savepath, COL_WAVE, COL_RESP, FACTOR_WAVE, NAMES
+            from .info_LSST import FILTERS, MAG5, COL_WAVE, COL_RESP, FACTOR_WAVE, NAMES
             self.filters = FILTERS
             self.mag5 = MAG5
             self.col_wave = COL_WAVE
@@ -456,7 +456,7 @@ class SynSvy():
             self.factor_wave = FACTOR_WAVE
             self.names = NAMES
         elif self.survey == 'Euclid':
-            from .info_EUCLID import FILTERS, MAG5, savepath, COL_WAVE, COL_RESP, FACTOR_WAVE, NAMES
+            from .info_EUCLID import FILTERS, MAG5, COL_WAVE, COL_RESP, FACTOR_WAVE, NAMES
             self.filters = FILTERS
             self.mag5 = MAG5
             self.col_wave = COL_WAVE
@@ -464,7 +464,15 @@ class SynSvy():
             self.factor_wave = FACTOR_WAVE
             self.names = NAMES
         elif self.survey == 'VIKING':
-            from .info_VIKING import FILTERS, MAG5, savepath, COL_WAVE, COL_RESP, FACTOR_WAVE, NAMES
+            from .info_VIKING import FILTERS, MAG5, COL_WAVE, COL_RESP, FACTOR_WAVE, NAMES
+            self.filters = FILTERS
+            self.mag5 = MAG5
+            self.col_wave = COL_WAVE
+            self.col_resp = COL_RESP
+            self.factor_wave = FACTOR_WAVE
+            self.names_filter = NAMES
+        elif self.survey == 'PANSTARRS':
+            from .info_PS import FILTERS, MAG5, COL_WAVE, COL_RESP, FACTOR_WAVE, NAMES
             self.filters = FILTERS
             self.mag5 = MAG5
             self.col_wave = COL_WAVE
@@ -472,9 +480,10 @@ class SynSvy():
             self.factor_wave = FACTOR_WAVE
             self.names_filter = NAMES
         else:
-            raise Exception("Options: LSST, Euclid, and VIKING")
+            raise Exception("Options: LSST, Euclid, VIKING, and PANSTARRS")
         
-        self.path_elcomos = path_elcosmos
+
+        self.path_elcosmos = path_elcosmos
         self.path_save = path_save
 
 
