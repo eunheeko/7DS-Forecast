@@ -1,2 +1,8 @@
 numpy
 scipy
+eazy
+astropy
+os
+matplotlib
+tqdm
+pickle

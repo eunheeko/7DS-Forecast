@@ -18,6 +18,7 @@ User Guide:
    :caption: Contents:
 
    installation
+   data
    notebooks
    api
 
