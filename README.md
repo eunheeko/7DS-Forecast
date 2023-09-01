@@ -31,10 +31,10 @@ Using `svnds`, you can generate mock data that would be observed in the future 7
 ## Installlation
 ### pip
 
-`pip install svnds==0.0.1`
+`pip install svnds`
 
 ### git
-`git clone `
+`git clone https://github.com/eunheeko/7DS-Forecast.git`
 
 <!-- ## Data Specifiaction
 ![data_spec](/images/data_specification.png)
