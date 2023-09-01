@@ -6,7 +6,7 @@ from setuptools import setup
 
 setup(
     name = 'svnds',
-    version = '0.0.1',
+    version = '1.0.0',
     packages = ['svnds'],
     pakcage_dir = {'svnds': 'svnds/'},
     package_data = {'svnds': ['data/*']},
