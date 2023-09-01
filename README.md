@@ -6,6 +6,10 @@
 
 A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8251967.svg)](https://doi.org/10.5281/zenodo.8251967)
+
+
+
 **This repo is under sconstuction!**
 
 * [Test page](https://eunheeko.github.io/7DS-Forecast/)
