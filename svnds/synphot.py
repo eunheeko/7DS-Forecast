@@ -139,9 +139,58 @@ class Syn7DS():
         print(Tsamps)
 
         return
+    
+    def synphot_single(self, wl, f_lambda, Tsamp, magscale = False, mag_ref = 18):
+        # Anstrom
+        # erg/s/cm2/A
+        #############
+        if magscale:
+            flux_ref = 10**((mag_ref + 48.6)/(-2.5))
+
+            idx_elcat = np.where(m6250_light['spec'] == int(sp[4:-5]))[0][0]
+                
+            # mag_rband = m6250_light['flux_6250'][idx_elcat]
+            flux_rband = m6250_light['flux_6250'][idx_elcat]
+            fl_factor = flux_ref / flux_rband
+        #############
+
+        # raw data 
+        f_nu = f_lambda * wl * (wl / 2.99792e18) / (1e-23 * 1e-6)  # micro Jansky
+        wl = wl / 10000      # micron
+
+        #synthetic photometry: 7DS
+        flux_survey = np.zeros_like(self.lambda_7ds, dtype = float)
+        sn_Tsamp_survey = np.zeros(shape = ( len(self.lambda_7ds), ), dtype = float)
+
+        for ii, wl_cen in enumerate(self.lambda_7ds):
+
+            wave_cen = f'{int(wl_cen):d}'
+
+            wave_lvf = self.filters_corrected['wave_' + wave_cen]
+            resp_lvf = self.filters_corrected['resp_' + wave_cen]
+
+            fl = synth_phot(wl, f_nu, wave_lvf, resp_lvf) #micro Jy
+
+            fl_erg = fl * 1e-6 * 1e-23
+            
+            #############
+            if magscale:
+                fl_erg *= fl_factor
+            #############
+            
+            flux_survey[ii] = fl_erg #erg
+
+            I_photo_src, I_photo_sky, I_dark = self.pointsrc_current_sds(-2.5 * np.log10(fl_erg) - 48.6, wave_lvf, resp_lvf)
+
+            sn = self.pointsrc_sn_sds(I_photo_src, I_photo_sky, I_dark, Tsamp)
+            sn_Tsamp_survey[ii] = sn
+
+        # return flux and flux error
+        return flux_survey, flux_survey / sn_Tsamp_survey
+
 
     def synphot(self, zones = range(1, 10), magscale = False, mag_ref = 18):
-        
+
         if magscale:
             self.mag_ref = mag_ref
             self.flux_ref = 10**((self.mag_ref + 48.6)/(-2.5))
