@@ -1,4 +1,4 @@
-# 7DS-Forecast-Photoz
+#7DS-Forecast-Photoz
 <p align="center"><img src="./images/svn_dim_photoz.gif"></p>
 
 <!-- ![7DS photo-z](/images/svn_dim_photoz.gif) -->
@@ -35,6 +35,8 @@ Using `svnds`, you can generate mock data that would be observed in the future 7
 
 ### git
 `git clone https://github.com/eunheeko/7DS-Forecast.git`
+
+### To be updated
 
 <!-- ## Data Specifiaction
 ![data_spec](/images/data_specification.png)
