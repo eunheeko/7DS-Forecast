@@ -19,7 +19,35 @@ A prediction study of photometric redshifts in upcoming 7-Dimensional Sky Survey
 ## Overview
 Using `svnds`, you can generate mock data that would be observed in the future 7DS and probe feasibility of science cases.
 
-### Understand & Utilize 7DS specificications
+### 7-Dimensional Telescope
+
+```geojson
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "ID": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+              [-90,35],
+              [-90,30],
+              [-85,30],
+              [-85,35],
+              [-90,35]
+          ]
+        ]
+      }
+    }
+  ]
+}
+```
+
 * features of 40 medium band filters
 
 ### Generate mock data
