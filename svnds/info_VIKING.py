@@ -19,7 +19,8 @@ NFILTER = len(FILTERS)
 NAMES = ['Z_V', 'Y_V', 'J_V', 'H_V', 'Ks_V']
 
 '''
-From Barnett+21, 5-sigma limiting magnitudes at (ZYJHKs) is (22.1, 20.3, 20.9, 19.8, 19.2) in VEGA
+From Barnett+21, 5-sigma limiting magnitudes at (ZYJHKs) is (22.1, 21.3, 20.9, 19.8, 19.2) in VEGA
+    - NOTE: It seems that the paper has typo (22.1, `20.3`, 20.9, 19.8, 19.2) but MAG5 at Y mag is 21.3 according to etheFigure 1
 
 However, from VIKING DR4 paper in Venemans+13 (Table1), (23.1, 22.3, 22.1, 21.5, 21.2) in AB mag
 - This uses conversion eq as (0.521, 0.618, 0.937, 1.384, 1.839)
@@ -29,10 +30,11 @@ for two reasons:
     (1) Barnett+21 is more up-to-date
     (2) Total survey area covers a larger region in Barnett
 
-Vega to AB conversions are (0.502, 0.600, 0.916, 1.366, 1.827)
+Vega to AB conversions are (0.502, 0.600, 0.916, 1.366, 1.827) (v1.3 ver)
+
 '''
 MAG5 = [22.1 + 0.502, 
-        20.3 + 0.600, 
+        21.3 + 0.600, 
         20.9 + 0.916, 
         19.8 + 1.366,
         19.2 + 1.827
