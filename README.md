@@ -21,6 +21,17 @@ Using `svnds`, you can generate mock data that would be observed in the future 7
 
 ### 7-Dimensional Telescope
 
+Chile, El Sauce Observatory (near CTIO/Cerro Pachon)
+
+Altitude: 1700 m
+
+320 clear nights
+
+Median seeing ~ 1.5”
+
+
+Operated by ObsTech
+
 ```geojson
 {
   "type": "FeatureCollection",
