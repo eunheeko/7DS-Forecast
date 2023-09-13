@@ -77,6 +77,10 @@ Operated by ObsTech
 
 ### To be updated
 
+|Input|prior|Description|
+|---|---|---|
+|7DS Y5 + VIKING|$m_{6250\AA}$|photoz_sds40_WFS_5yr_eff_VIKING_adderr.coeff|
+
 <!-- ## Data Specifiaction
 ![data_spec](/images/data_specification.png)
 
