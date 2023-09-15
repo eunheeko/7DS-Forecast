@@ -33,15 +33,21 @@ Median seeing ~ 1.5”
 Operated by ObsTech
 
 ```geojson
-{ 
-  "type": "Feature",
-  "properties": {
-    "radius": 0.1,
-  },
-  "geometry": {
-    "type": "Point",
-    "coordinates": [-30.47027, -70.76494]
-  }
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "ID": 0
+      }
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [-30.47027, -70.76494]
+    }
+  ]
 }
 ```
 
