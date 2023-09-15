@@ -33,6 +33,19 @@ Median seeing ~ 1.5”
 Operated by ObsTech
 
 ```geojson
+{ "type": "Feature",
+  "properties": {
+    "radius": 0.1
+  }
+  "geometry": {
+    "type": "Point",
+    "coordinates": [-30.47027, -70.76494]
+  }
+}
+```
+
+<!-- 
+```geojson
 {
   "type": "FeatureCollection",
   "features": [
@@ -57,7 +70,7 @@ Operated by ObsTech
     }
   ]
 }
-```
+``` -->
 
 * features of 40 medium band filters
 
@@ -77,9 +90,28 @@ Operated by ObsTech
 
 ### To be updated
 
+* +PS1 / PS only
+* +VIKING
+* SPHEREx only
+* R-band prior experiment
+* Customized color prior (TBD)
+
 |Input|prior|zstep|Description|
 |---|---|---|---|
 |7DS Y5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_adderr|
+|7DS Y5 scale = 19.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_scale_19.5_eff_adderr|
+|7DS Y5 scale = 20.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_scale_20.5_eff_adderr|
+|7DS Y5 scale = 21.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_scale_21.5_eff_adderr|
+|7DS Y5 scale = 22.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_scale_22.5_eff_adderr|
+|7DS Y5 + PS1 |$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_PANSTARRS_adderr|
+|PS1 |$R$|0.01|photoz_PANSTARRS_adderr|
+|7DS Y5 + SPHEREx|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_SPHEREx_adderr (QSO)|
+|7DS Y5 + SPHEREx scale = 19.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_SPHEREx_scale_19.5_adderr (QSO)|
+|7DS Y5 + SPHEREx scale = 20.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_SPHEREx_scale_20.5_adderr (QSO)|
+|7DS Y5 + SPHEREx scale = 21.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_SPHEREx_scale_21.5_adderr (QSO)|
+|7DS Y5 + SPHEREx scale = 22.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_SPHEREx_scale_22.5_adderr (QSO)|
+|SPHEREx scale = 22.5|X|0.01|photoz_SPHEREx_scale_22.5_adderr (QSO)|
+
 <!-- |7DS Y5 + VIKING|$m_{6250\AA}$|photoz_sds40_WFS_5yr_eff_VIKING_adderr.coeff| -->
 
 <!-- ## Data Specifiaction
