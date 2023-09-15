@@ -35,7 +35,7 @@ Operated by ObsTech
 ```geojson
 {
   "type": "FeatureCollection",
-  "features": [
+  "features": {
     {
       "type": "Feature",
       "id": 1,
@@ -47,7 +47,7 @@ Operated by ObsTech
       "type": "Point",
       "coordinates": [-30.47027, -70.76494]
     }
-  ]
+  }
 }
 ```
 
