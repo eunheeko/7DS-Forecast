@@ -35,19 +35,19 @@ Operated by ObsTech
 ```geojson
 {
   "type": "FeatureCollection",
-  "features": {
+  "features": [
     {
       "type": "Feature",
       "id": 1,
       "properties": {
         "ID": 0
-      }
-    },
-    "geometry": {
+      },
+      "geometry": {
       "type": "Point",
       "coordinates": [-30.47027, -70.76494]
+      }
     }
-  }
+  ]
 }
 ```
 
