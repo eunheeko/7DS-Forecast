@@ -11,6 +11,9 @@ SPHEREx
 
 VIKING
 +++++++++++++++++++++++++++++++++
+* Photometric System: [VISTA technical information](http://casu.ast.cam.ac.uk/surveys-projects/vista/technical/filter-set)
+* 5-sigma limiting magnitude [Barnett et al. 2021](https://ui.adsabs.harvard.edu/abs/2021MNRAS.501.1663B/abstract)
+    * (Z, Y, J, H, Ks) = (22.1, 20.3, 20.9, 19.8, 19.2) in VEGA magnitude
 
 PANSTARRS
 +++++++++++++++++++++++++++++++++

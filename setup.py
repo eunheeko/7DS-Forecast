@@ -2,11 +2,12 @@ from glob import glob
 from os.path import basename, splitext
 # from setuptools import find_packages, setup
 from setuptools import setup
+from svnds import __version__
 
-
+version = __version__
 setup(
     name = 'svnds',
-    version = '1.0.0',
+    version = version,
     packages = ['svnds'],
     pakcage_dir = {'svnds': 'svnds/'},
     package_data = {'svnds': ['data/*']},

@@ -97,27 +97,33 @@ Operated by ObsTech
 
 ### To be updated
 
-* +PS1 / PS only
-* +VIKING
+
 * SPHEREx only
-* R-band prior experiment
 * Customized color prior (TBD)
 
 |Input|prior|zstep|Description|
 |---|---|---|---|
-|7DS Y5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_adderr|
-|7DS Y5 scale = 19.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_scale_19.5_eff_adderr|
-|7DS Y5 scale = 20.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_scale_20.5_eff_adderr|
-|7DS Y5 scale = 21.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_scale_21.5_eff_adderr|
-|7DS Y5 scale = 22.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_scale_22.5_eff_adderr|
-|7DS Y5 + PS1 |$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_PANSTARRS_adderr|
+|7DS Y5|$m_{6250\AA}$|0.01|photoz_7DS40_WFS_Y5_eff_adderr|
+|7DS Y5 scale = 19.5|$m_{6250\AA}$|0.01|photoz_7DS40_WFS_Y5_scale_19.5_eff_adderr|
+|7DS Y5 scale = 20.5|$m_{6250\AA}$|0.01|photoz_7DS40_WFS_Y5_scale_20.5_eff_adderr|
+|7DS Y5 scale = 21.5|$m_{6250\AA}$|0.01|photoz_7DS40_WFS_Y5_scale_21.5_eff_adderr|
+|7DS Y5 scale = 22.5|$m_{6250\AA}$|0.01|photoz_7DS40_WFS_Y5_scale_22.5_eff_adderr|
+|7DS Y5 + PS1 |$m_{6250\AA}$|0.01|photoz_7DS40_WFS_Y5_eff_PANSTARRS_adderr|
 |PS1 |$R$|0.01|photoz_PANSTARRS_adderr|
-|7DS Y5 + SPHEREx|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_SPHEREx_adderr (QSO)|
-|7DS Y5 + SPHEREx scale = 19.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_SPHEREx_scale_19.5_adderr (QSO)|
-|7DS Y5 + SPHEREx scale = 20.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_SPHEREx_scale_20.5_adderr (QSO)|
-|7DS Y5 + SPHEREx scale = 21.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_SPHEREx_scale_21.5_adderr (QSO)|
-|7DS Y5 + SPHEREx scale = 22.5|$m_{6250\AA}$|0.01|photoz_7DS_WFS_Y5_eff_SPHEREx_scale_22.5_adderr (QSO)|
+|7DS Y5 |$R$|0.01|photoz_7DS_WFS_Y5_eff_prior_R_adderr|
+|7DS Y5 + VIKING|$m_{6250\AA}$|0.01|photoz_7DS40_WFS_Y5_eff_VIKING_adderr|
+|7DS Y5 + SPHEREx|$m_{6250\AA}$|0.01|photoz_7DS40_WFS_Y5_eff_SPHEREx_adderr (QSO)|
+|7DS Y5 + SPHEREx scale = 19.5|$m_{6250\AA}$|0.01|photoz_7DS40_WFS_Y5_eff_SPHEREx_scale_19.5_adderr (QSO)|
+|7DS Y5 + SPHEREx scale = 20.5|$m_{6250\AA}$|0.01|photoz_7DS40_WFS_Y5_eff_SPHEREx_scale_20.5_adderr (QSO)|
+|7DS Y5 + SPHEREx scale = 21.5|$m_{6250\AA}$|0.01|photoz_7DS40_WFS_Y5_eff_SPHEREx_scale_21.5_adderr (QSO)|
+|7DS Y5 + SPHEREx scale = 22.5|$m_{6250\AA}$|0.01|photoz_7DS40_WFS_Y5_eff_SPHEREx_scale_22.5_adderr (QSO)|
+|SPHEREx scale = 19.5|X|0.01|photoz_SPHEREx_scale_19.5_adderr (QSO)|
+|SPHEREx scale = 20.5|X|0.01|photoz_SPHEREx_scale_20.5_adderr (QSO)|
+|SPHEREx scale = 21.5|X|0.01|photoz_SPHEREx_scale_21.5_adderr (QSO)|
 |SPHEREx scale = 22.5|X|0.01|photoz_SPHEREx_scale_22.5_adderr (QSO)|
+|7DS Y5 20 filters|$m_{6250\AA}$|0.01|photoz_7DS20_WFS_Y5_eff_adderr|
+|7DS Y5 20 filters (zstep = 0.001)|$m_{6250\AA}$|0.001|photoz_7DS20_WFS_Y5_eff_zstep_0.001_adderr|
+|7DS Y5 40 filters (zstep = 0.001)|$m_{6250\AA}$|0.001|photoz_7DS40_WFS_Y5_eff_zstep_0.001_adderr (QSO)|
 
 <!-- |7DS Y5 + VIKING|$m_{6250\AA}$|photoz_sds40_WFS_5yr_eff_VIKING_adderr.coeff| -->
 
