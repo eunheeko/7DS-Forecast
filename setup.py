@@ -9,7 +9,7 @@ setup(
     name = 'svnds',
     version = version,
     packages = ['svnds'],
-    pakcage_dir = {'svnds': 'svnds/'},
+    package_dir = {'svnds': 'svnds/'},
     package_data = {'svnds': ['data/*']},
     py_modules = [splitext(basename(path))[0] for path in glob('svnds/*.py')]
 )
