@@ -8,7 +8,9 @@ version = __version__
 setup(
     name = 'svnds',
     version = version,
+    author = 'Eunhee Ko',
     packages = ['svnds'],
+    package_dir = {'': '7DS-Forecast'},
     package_data = {'svnds': ['data/*']},
     py_modules = [splitext(basename(path))[0] for path in glob('svnds/*.py')]
 )
