@@ -10,8 +10,11 @@ setup(
     name = 'svnds',
     version = version,
     author = 'Eunhee Ko',
-    package_dir = {'': 'svnds', '': 'svnds/data', '': 'svnds/data/elcosmos'},
-    package_data = {'data.elcosmos': ['*.csv']},
+    packages = ['svnds', 'svnds/data', 'svnds/data/elcosmos'],
+    package_data = {'svnds/data/elcosmos': ['*.csv']},
     include_package_data = True,
     py_modules = [splitext(basename(path))[0] for path in glob('svnds/*.py')]
 )
+
+
+# package_dir = {'': 'svnds'},
