@@ -10,6 +10,7 @@ setup(
     name = 'svnds',
     version = version,
     author = 'Eunhee Ko',
+    packate_dir = {'': 'svnds'},
     package_data = {'': ['data/*']},
     include_package_data = True,
     py_modules = [splitext(basename(path))[0] for path in glob('svnds/*.py')]
