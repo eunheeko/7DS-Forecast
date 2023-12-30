@@ -3,7 +3,7 @@ from astropy.table import Table
 from astropy.io import ascii
 
 import os
-from svnds import PATH_DATA
+from svnds import PATH_DATA_ELCOSMOS
 
 def find_ylims(xmin, xmax, xs, ys):
     
@@ -140,7 +140,7 @@ def load_inputs(idx, tempfilts):
 
 
 
-elcat_light = Table.read(os.path.join(PATH_DATA, "elcosmos/elcosmos_light.csv"))
+elcat_light = Table.read(os.path.join(PATH_DATA_ELCOSMOS, "elcosmos_light.csv"))
 
 # synphot = Table.read("/data8/EL_COSMOS/synphots/SDS/original/synphot_7ds_yrs_all_tot.csv") #synthetic photometry
 # elcat = ascii.read('/data8/EL_COSMOS/ELCOSMOS_v1.cat')
