@@ -7,10 +7,10 @@ from astropy.table import Table, vstack
 from scipy.integrate import trapezoid
 from .skytrans import f_nu_sky, wl_um_sky
 
-from svnds import PATH_DATA
+from svnds import PATH_DATA, PATH_DATA_ELCOSMOS
 
-elcat_light = Table.read(os.path.join(PATH_DATA, "elcosmos/elcosmos_light.csv"))
-m6250_light = Table.read(os.path.join(PATH_DATA, "elcosmos/m6250_light.csv"))
+elcat_light = Table.read(os.path.join(PATH_DATA_ELCOSMOS, "elcosmos_light.csv"))
+m6250_light = Table.read(os.path.join(PATH_DATA_ELCOSMOS, "m6250_light.csv"))
 
 # Load EL-COSMOS catalog
 def load_catalog(path_elcosmos, zone):
@@ -103,11 +103,12 @@ def synphot_7ds(wave):
 
     return
 
-Tsamps = np.array([180, 180 * 364/14, 180 * 364/14 * 3, 180 * 364/14 * 5, 180 * 364/14 * 7, 180 * 365, 180 * 365 * 5])
-Tsamps = (Tsamps * 0.5).astype(int)
+# Tsamps = np.array([180, 180 * 364/14, 180 * 364/14 * 3, 180 * 364/14 * 5, 180 * 364/14 * 7, 180 * 365, 180 * 365 * 5])
+# Tsamps = (Tsamps * 0.5).astype(int)
+
 class Syn7DS():
 
-    def __init__(self, path_elcosmos, path_save, Tsamps = Tsamps):
+    def __init__(self, path_elcosmos, path_save, Tsamps):
         """__init__ _summary_
 
         _extended_summary_
@@ -136,7 +137,7 @@ class Syn7DS():
 
         print('survey: ' + self.survey)
         print('Exposure time: ' )
-        print(Tsamps)
+        print(self.Tsamps)
 
         return
     
@@ -237,7 +238,7 @@ class Syn7DS():
 
             #synthetic photometry: 7DS
             flux_survey = np.zeros_like(self.lambda_7ds, dtype = float)
-            sn_Tsamps_survey = np.zeros(shape = ( len(self.lambda_7ds) * len(Tsamps), ), dtype = float)
+            sn_Tsamps_survey = np.zeros(shape = ( len(self.lambda_7ds) * len(self.Tsamps), ), dtype = float)
 
             for ii, wl_cen in enumerate(self.lambda_7ds):
 
@@ -259,9 +260,9 @@ class Syn7DS():
 
                 I_photo_src, I_photo_sky, I_dark = self.pointsrc_current_sds(-2.5 * np.log10(fl_erg) - 48.6, wave_lvf, resp_lvf)
 
-                for it, tt in enumerate(Tsamps):
+                for it, tt in enumerate(self.Tsamps):
                     sn = self.pointsrc_sn_sds(I_photo_src, I_photo_sky, I_dark, tt)
-                    sn_Tsamps_survey[ii*len(Tsamps) + it] = sn
+                    sn_Tsamps_survey[ii*len(self.Tsamps) + it] = sn
 
             flux_total.append(flux_survey)
             sn_Tsamps_total.append(sn_Tsamps_survey)
@@ -284,9 +285,9 @@ class Syn7DS():
             cols.append(flux_total[:, ii])
             names.append('flux_' + wave_cen)
 
-            for it, tt in enumerate(Tsamps):
+            for it, tt in enumerate(self.Tsamps):
 
-                cols.append(flux_total[:, ii] / sn_Tsamps_total[:, ii*len(Tsamps)+it])
+                cols.append(flux_total[:, ii] / sn_Tsamps_total[:, ii*len(self.Tsamps)+it])
                 names.append('flux_' + wave_cen + f'_err_{tt:d}')
 
         filename = self.path_save + 'synphot_' + self.survey 
